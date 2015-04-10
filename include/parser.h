@@ -140,7 +140,7 @@ namespace crow
 
         request to_request() const
         {
-            return request{(HTTPMethod)method, std::move(raw_url), std::move(url), std::move(url_params), std::move(headers), std::move(body)};
+            return request{(HTTPMethod)method, std::move(raw_url), std::move(url), std::move(url_params), std::move(headers), std::move(body), &handler_->socket().get_io_service()};
         }
 
         bool check_version(int major, int minor) const

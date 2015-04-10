@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/asio.hpp>
 #include "common.h"
 #include "ci_map.h"
 #include "query_string.h"
@@ -25,6 +26,7 @@ namespace crow
         query_string url_params;
         ci_map headers;
         std::string body;
+        boost::asio::io_service* io_service;
 
         void* middleware_context{};
 
@@ -33,8 +35,8 @@ namespace crow
         {
         }
 
-        request(HTTPMethod method, std::string raw_url, std::string url, query_string url_params, ci_map headers, std::string body)
-            : method(method), raw_url(std::move(raw_url)), url(std::move(url)), url_params(std::move(url_params)), headers(std::move(headers)), body(std::move(body))
+        request(HTTPMethod method, std::string raw_url, std::string url, query_string url_params, ci_map headers, std::string body, boost::asio::io_service* io_service)
+            : method(method), raw_url(std::move(raw_url)), url(std::move(url)), url_params(std::move(url_params)), headers(std::move(headers)), body(std::move(body)), io_service(io_service)
         {
         }
 
