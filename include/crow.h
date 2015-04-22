@@ -53,6 +53,11 @@ namespace crow
             return *this;
         }
 
+        self_t& address(boost::asio::ip::address address) {
+            address_ = address;
+            return *this;
+        }
+
         self_t& multithreaded()
         {
             return concurrency(std::thread::hardware_concurrency());
@@ -74,7 +79,7 @@ namespace crow
         void run()
         {
             validate();
-            server_t server(this, port_, &middlewares_, concurrency_);
+            server_t server(this, address_, port_, &middlewares_, concurrency_);
             server.run();
         }
 
@@ -103,6 +108,7 @@ namespace crow
     private:
         uint16_t port_ = 80;
         uint16_t concurrency_ = 1;
+        boost::asio::ip::address address_;
 
         Router router_;
 
