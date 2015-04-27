@@ -272,7 +272,8 @@ namespace crow
                 if (t() != type::Number)
                     throw std::runtime_error("value is not number");
 #endif
-                return boost::lexical_cast<int64_t>(start_, end_-start_);
+                //return boost::lexical_cast<int64_t>(start_, end_-start_);
+                return static_cast<int64_t>(boost::lexical_cast<double>(start_, end_-start_));
             }
 
             double d() const
