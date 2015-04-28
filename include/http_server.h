@@ -105,8 +105,12 @@ namespace crow
 
             for (int i = 0; i < concurrency_; i++)
             {
-                while (timer_queue_pool_[i] == nullptr)
+                while (timer_queue_pool_[i] == nullptr) {
+                    CROW_LOG_INFO 
+                        << "This log prevents optimizing while condition:"
+                        << timer_queue_pool_[i];
                     std::this_thread::yield();
+                }
             }
 
             do_accept();
