@@ -79,9 +79,13 @@ namespace crow
         void run()
         {
             validate();
-            server_t server(this, address_, port_, &middlewares_, concurrency_);
-            server.run();
+//            server_t server(this, address_, port_, &middlewares_, concurrency_);
+//            server.run();
+            server_.reset(new server_t(this, address_, port_, &middlewares_, concurrency_));
+            server_->run();
         }
+
+        void stop() { server_->stop(); }
 
         void debug_print()
         {
@@ -113,6 +117,8 @@ namespace crow
         Router router_;
 
         std::tuple<Middlewares...> middlewares_;
+
+        std::unique_ptr<server_t> server_;
     };
     template <typename ... Middlewares>
     using App = Crow<Middlewares...>;
