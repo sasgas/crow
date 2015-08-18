@@ -4831,7 +4831,7 @@ namespace crow
                 case type::Number: 
                     {
                         char outbuf[128];
-                        sprintf(outbuf, "%g", v.d);
+                        sprintf(outbuf, "%.17g", v.d);
                         out += outbuf;
                     }
                     break;
