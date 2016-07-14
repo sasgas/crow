@@ -273,9 +273,15 @@ namespace crow
                 }
             }
 
-            CROW_LOG_INFO << "Request: " << boost::lexical_cast<std::string>(socket_.remote_endpoint()) << " " << this << " HTTP/" << parser_.http_major << "." << parser_.http_minor << ' '
+            boost::system::error_code ec;
+            CROW_LOG_INFO << "Request: " << boost::lexical_cast<std::string>(socket_.remote_endpoint(ec)) << " " << this << " HTTP/" << parser_.http_major << "." << parser_.http_minor << ' '
              << method_name(req.method) << " " << req.url;
 
+            if (ec)
+            {
+                is_invalid_request = true;
+                res = response(400);
+            }
 
             need_to_call_after_handlers_ = false;
             if (!is_invalid_request)
@@ -451,7 +457,8 @@ namespace crow
                     {
                         cancel_deadline_timer();
                         parser_.done();
-                        socket_.close();
+                        boost::system::error_code ec2;
+                        socket_.close(ec2);
                         is_reading = false;
                         CROW_LOG_DEBUG << this << " from read(1)";
                         check_destroy();
@@ -481,7 +488,8 @@ namespace crow
                     {
                         if (close_connection_)
                         {
-                            socket_.close();
+                            boost::system::error_code ec2;
+                            socket_.close(ec2);
                             CROW_LOG_DEBUG << this << " from write(1)";
                             check_destroy();
                         }
@@ -520,7 +528,8 @@ namespace crow
                 {
                     return;
                 }
-                socket_.close();
+                boost::system::error_code ec2;
+                socket_.close(ec2);
             });
             CROW_LOG_DEBUG << this << " timer added: " << timer_cancel_key_.first << ' ' << timer_cancel_key_.second;
         }
